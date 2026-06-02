@@ -1,121 +1,272 @@
-# MailIQ — AI-Powered Email Triage SaaS
+# MailIQ
 
-> Receive a phone call when an AI determines an email contains a **real deadline** that requires your action.
+### AI-Powered Intelligent Email Triage & Deadline Alert System
 
-## Architecture
-
-```
-stacksprint/
-├── backend/     # Node.js + Express API (port 3001)
-├── frontend/    # React + Vite + Tailwind (port 5173)
-└── docker-compose.yml  # Local PostgreSQL
-```
-
-## Quick Start
-
-### 1. Launch PostgreSQL (Docker)
-```bash
-docker-compose up -d
-```
-The schema is automatically applied on first start.
-
-### 2. Configure Backend
-```bash
-cd backend
-cp .env.example .env
-# Edit .env with your credentials (see below)
-npm install
-npm run dev
-```
-
-### 3. Configure Frontend
-```bash
-cd frontend
-cp .env.example .env
-# Edit .env with your Firebase config
-npm install
-npm run dev
-```
-
-Open http://localhost:5173
+> Transform email from passive storage into an intelligent productivity infrastructure.
 
 ---
 
-## Required Credentials
+## Overview
 
-| Service | Where to Get | Backend `.env` Key |
-|---|---|---|
-| **PostgreSQL** | Docker Compose (local) or cloud | `DATABASE_URL` |
-| **Firebase** | [Firebase Console](https://console.firebase.google.com) → Service Accounts | `FIREBASE_SERVICE_ACCOUNT` |
-| **Firebase (client)** | Firebase Console → Project Settings → Apps | `VITE_FIREBASE_*` in `frontend/.env` |
-| **Google OAuth / Gmail API** | [GCP Console](https://console.cloud.google.com/apis/credentials) | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` |
-| **Anthropic Claude** | [console.anthropic.com](https://console.anthropic.com) | `ANTHROPIC_API_KEY` |
-| **Twilio** | [console.twilio.com](https://console.twilio.com) | `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_PHONE_NUMBER` |
+MailIQ is an AI-powered email intelligence platform designed to help individuals, teams, and organizations manage high-volume inboxes efficiently.
 
-### Firebase Setup Checklist
-- [ ] Enable **Phone Authentication** in Firebase Console → Authentication → Sign-in methods
-- [ ] Add `localhost` to **Authorized domains** (Firebase → Authentication → Settings)
-- [ ] Download **service account JSON** → paste as single-line string into `FIREBASE_SERVICE_ACCOUNT`
+Unlike traditional email clients that sort messages chronologically, MailIQ analyzes email content, identifies actionable information, detects deadlines, prioritizes important communication, and proactively alerts users before critical commitments are missed.
 
-### GCP / Gmail API Checklist
-- [ ] Enable **Gmail API** in API Library
-- [ ] Create **OAuth 2.0 Client ID** (Web application type)
-- [ ] Add `http://localhost:3001/api/gmail/callback` as an **Authorized redirect URI**
+The platform combines AI-powered classification, deadline extraction, smart sender grouping, and automated voice notifications to create a truly proactive email experience.
 
 ---
 
-## API Endpoints
+## Problem Statement
 
-| Method | Path | Description |
-|---|---|---|
-| `GET` | `/api/health` | Health check |
-| `POST` | `/api/auth/verify-otp` | Exchange Firebase token → session cookie |
-| `POST` | `/api/auth/logout` | Clear session cookie |
-| `GET` | `/api/auth/me` | Get current user |
-| `GET` | `/api/gmail/auth` | Start Gmail OAuth2 flow |
-| `GET` | `/api/gmail/callback` | Gmail OAuth2 callback |
-| `GET` | `/api/gmail/emails` | Fetch inbox emails |
-| `GET` | `/api/gmail/status` | Gmail connection status |
-| `GET/POST/DELETE` | `/api/gmail/filters` | Keyword filter CRUD |
-| `POST` | `/api/triage/process` | Run AI triage on email |
-| `GET` | `/api/triage/history` | Call trigger history |
+Modern email systems suffer from several fundamental issues:
+
+* Important emails get buried under newsletters and promotions.
+* Critical deadlines are frequently missed.
+* Existing inboxes are reactive rather than proactive.
+* Users spend significant time manually sorting and prioritizing emails.
+* Traditional notifications fail to communicate urgency effectively.
+* Spam and malicious content can interfere with important workflows.
+
+As inbox volume continues to grow, users need intelligent systems that understand context rather than simply displaying messages.
 
 ---
 
-## Security Features
+## Solution
 
-| Layer | Implementation |
-|---|---|
-| HTTP Headers | `helmet` |
-| CORS | Frontend URL whitelist only |
-| Rate Limiting | 100 req/15min (global), 10 req/15min (auth) |
-| Session | JWT in `HttpOnly` + `Secure` + `SameSite=Strict` cookie |
-| SQL | Parameterized queries (no ORM string interpolation) |
-| Prompt Injection | Pre-filter drops `List-Unsubscribe` / `Precedence: bulk` emails |
-| Spam Protection | Circuit breaker: max 2 Twilio calls/sender/24h |
-| Secrets | Zod env validation — server exits on startup if any key is missing |
+MailIQ introduces an AI-powered workflow layer on top of traditional email systems.
+
+The platform continuously analyzes incoming emails, identifies actionable information, extracts deadlines, evaluates urgency, and generates proactive alerts when user intervention is required.
+
+Instead of checking email constantly, users receive intelligence-driven recommendations and notifications only when necessary.
 
 ---
 
-## AI Triage Flow
+## Key Features
 
-```
-Email arrives with "deadline" keyword
-    ↓
-Security Pre-Filter
-  • Has List-Unsubscribe header? → DROP
-  • Has Precedence: bulk? → DROP
-    ↓
-Claude Sonnet AI Analysis
-  Input:  Sender, Subject, Body
-  Output: { is_real_deadline, action_required, deadline_datetime, reasoning, trigger_call }
-    ↓
-Circuit Breaker Check (PostgreSQL)
-  • Same sender triggered ≥ 2 calls in 24h? → BLOCK
-    ↓
-Twilio Voice Call
-  Subject sanitization:
-  • Empty → "Deadline"
-  • > 50 chars → "Deadline. Please check your application."
-  TwiML: <Say voice="alice">Urgent alert. [subject].</Say>
-```
+### Smart Sender Pockets
+
+Automatically groups emails by sender into organized pockets.
+
+Benefits:
+
+* Reduced inbox clutter
+* Faster triage
+* Better context preservation
+* Improved email navigation
+
+---
+
+### AI Deadline Detection
+
+Advanced AI models analyze email content and identify:
+
+* Deadlines
+* Meeting schedules
+* Submission dates
+* Action-required requests
+* Time-sensitive commitments
+
+The system extracts and validates dates before triggering any automated workflow.
+
+---
+
+### Dynamic Keyword Intelligence
+
+Users can define custom keywords and categories.
+
+Examples:
+
+* Internship
+* Placement
+* Patent
+* Research
+* Client
+* Invoice
+
+MailIQ automatically prioritizes emails matching selected keywords.
+
+---
+
+### Intelligent Voice Alerts
+
+For high-priority emails containing verified deadlines:
+
+* Automated voice calls are generated.
+* Critical information is summarized.
+* Users receive proactive alerts.
+
+This ensures important commitments are not missed.
+
+---
+
+### Spam-Aware Processing
+
+Security-focused filtering removes:
+
+* Promotional messages
+* Bulk mail
+* Unwanted subscriptions
+* Suspicious email patterns
+
+before AI analysis begins.
+
+---
+
+### AI Email Summarization
+
+Generate concise summaries for:
+
+* Long email threads
+* Team discussions
+* Client communications
+* Project updates
+
+---
+
+### Smart Action Extraction
+
+Automatically identify:
+
+* Tasks
+* Deadlines
+* Follow-ups
+* Meetings
+* Required actions
+
+and convert them into actionable workflows.
+
+---
+
+## Security
+
+MailIQ follows a security-first architecture.
+
+### Authentication
+
+* Phone OTP Authentication
+* Secure Identity Verification
+* Session Management
+
+### Authorization
+
+* Role-Based Access Control (RBAC)
+* User Isolation
+* Permission Enforcement
+
+### API Security
+
+* Strict Input Validation
+* Schema Enforcement
+* Domain Verification
+* Rate Limiting
+
+### Auditability
+
+* Alert Logging
+* Activity Tracking
+* Deadline History
+* Workflow Auditing
+
+---
+
+## Technology Stack
+
+### Frontend
+
+* React
+* Tailwind CSS
+* Shadcn UI
+
+### Backend
+
+* Node.js
+* Express.js
+
+### Database
+
+* PostgreSQL
+
+### Authentication
+
+* Firebase Authentication
+
+### AI Layer
+
+* Claude / OpenAI Models
+* Deadline Detection Engine
+* Email Classification Engine
+
+### Integrations
+
+* Gmail OAuth 2.0
+* Twilio Voice API
+
+### Infrastructure
+
+* Cloud-Native SaaS Architecture
+* Background Scheduler
+* Retry Processing Engine
+
+---
+
+## SaaS Plans
+
+### Free
+
+* Basic email grouping
+* Limited AI scans
+* Limited voice alerts
+
+### Pro
+
+* Unlimited keyword filters
+* Advanced AI triage
+* Higher alert limits
+* Priority support
+
+### Enterprise
+
+* Team management
+* Organization controls
+* SSO integration
+* Dedicated SLA
+* Custom workflows
+
+---
+
+## Future Roadmap
+
+### Phase 1
+
+* Gmail integration
+* Deadline detection
+* Voice alerts
+
+### Phase 2
+
+* Outlook integration
+* AI summaries
+* Smart workflows
+
+### Phase 3
+
+* Team collaboration
+* Enterprise dashboards
+* Workflow automation
+
+### Phase 4
+
+* MailIQ AI Agent
+* Auto-response generation
+* Meeting scheduling
+* Personal productivity assistant
+
+---
+
+## Vision
+
+MailIQ aims to become the intelligence layer for modern email communication.
+
+Rather than managing inboxes manually, users interact with a proactive AI system that understands urgency, identifies actionable information, and ensures that important commitments are never overlooked.
+
+**MailIQ — Never Miss What Truly Matters.**
