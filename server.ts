@@ -13,29 +13,24 @@ import crypto from "crypto";
 const app = express();
 const PORT = 3000;
 
-// Rewrite Netlify function path prefix
-app.use((req, res, next) => {
-  const prefix = "/.netlify/functions/api";
-  if (req.url.startsWith(prefix)) {
-    req.url = req.url.slice(prefix.length);
-  }
-  if (!req.url.startsWith("/api")) {
-    req.url = "/api" + req.url;
-  }
-  next();
-});
-
 // Body parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Ensure data directory exists
-const isServerless = process.env.NETLIFY || process.env.LAMBDA_TASK_ROOT || process.env.AWS_EXECUTION_ENV;
-const DATA_DIR = isServerless
-  ? "/tmp"
-  : path.join(process.cwd(), "data");
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
+// Determine writable data directory (fallback to /tmp in read-only serverless runtimes)
+let DATA_DIR = path.join(process.cwd(), "data");
+try {
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
+  const testFile = path.join(DATA_DIR, ".write-test");
+  fs.writeFileSync(testFile, "test");
+  fs.unlinkSync(testFile);
+} catch (e) {
+  DATA_DIR = "/tmp";
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
 }
 
 const DB_FILE = path.join(DATA_DIR, "db.json");
