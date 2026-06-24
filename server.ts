@@ -18,7 +18,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Ensure data directory exists
-const DATA_DIR = path.join(process.cwd(), "data");
+const DATA_DIR = process.env.NETLIFY
+  ? "/tmp"
+  : path.join(process.cwd(), "data");
 if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
 }
@@ -840,4 +842,8 @@ async function startServer() {
   });
 }
 
-startServer();
+if (!process.env.NETLIFY) {
+  startServer();
+}
+
+export default app;

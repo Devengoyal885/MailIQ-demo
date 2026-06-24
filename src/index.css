@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-display: "Space Grotesk", sans-serif;
+
+  /* Custom Night Mode colors matching specification exactly */
+  --color-night-bg: #1A1208;
+  --color-night-surface: #2A1F0E;
+  --color-night-text: #F5E6C8;
+  --color-night-accent: #D97706;
+  --color-night-border: #3F2E14;
+  --color-night-muted: #8B7355;
+  --color-night-highlight: #4E3615;
+
+  /* Light colors */
+  --color-brand-primary: #6366F1;
+  --color-brand-secondary: #4F46E5;
+}
+
+/* Custom transitions and scrollbar stylings for the application's widgets */
+* {
+  transition-property: background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Custom scrollbars for dashboard widgets */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 3px;
+}
+
+.night ::-webkit-scrollbar-thumb {
+  background: #3F2E14;
+  border-radius: 3px;
+}
