@@ -249,8 +249,10 @@ The system implements scheduled, transitions-aware eye care options:
 ---
 
 ## 👥 TEAM ARCLIGHT
-*   **Deven Goyal** - Lead Architect & AI Integrator
-*   **Arclight Hackers** - Full-Stack & Cyber Security Engineers
+*   **Deven**
+*   **Divya Verma**
+*   **Rishabh Verma**
+*   **Aditya Singh**
 
 ---
 

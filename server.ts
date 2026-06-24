@@ -228,7 +228,7 @@ const authenticateToken = (req: any, res: any, next: any) => {
 
 // API: Health Check
 app.get("/api/health", (req, res) => {
-  res.json({ status: "ok", version: "1.0.0", winner: "Team ArcLight (Chandigarh University)" });
+  res.json({ status: "ok", version: "1.0.0" });
 });
 
 // API: Auth / Mock OTP

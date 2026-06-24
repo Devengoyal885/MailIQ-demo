@@ -1,6 +1,6 @@
 {
   "name": "Mail IQ",
-  "description": "AI-Powered Intelligent Email Triage & Deadline Alerts - Stack Sprint 1.0 Chandigarh University Hackathon Winner by Team ArcLight.",
+  "description": "AI-Powered Intelligent Email Triage & Deadline Alerts.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
