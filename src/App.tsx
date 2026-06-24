@@ -56,26 +56,16 @@ export default function App() {
   const fetchData = async () => {
     if (!token) return;
     try {
-      const headers = { 'Authorization': `Bearer ${token}` };
+      // Mocked Backend: Import mock data dynamically or statically
+      const { initialSeedData } = await import('./mockData');
+      
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 500));
 
-      const [emailsRes, keywordsRes, callsRes, secRes] = await Promise.all([
-        fetch('/api/emails', { headers }),
-        fetch('/api/keywords', { headers }),
-        fetch('/api/alerts', { headers }),
-        fetch('/api/security-logs', { headers })
-      ]);
-
-      const [emailsData, keywordsData, callsData, secData] = await Promise.all([
-        emailsRes.json(),
-        keywordsRes.json(),
-        callsRes.json(),
-        secRes.json()
-      ]);
-
-      setEmails(emailsData.emails || []);
-      setKeywords(keywordsData.keywords || []);
-      setVoiceCalls(callsData.voiceCalls || []);
-      setSecurityLogs(secData.securityLogs || []);
+      setEmails(initialSeedData.emails || []);
+      setKeywords(initialSeedData.keywords || []);
+      setVoiceCalls(initialSeedData.voiceCalls || []);
+      setSecurityLogs(initialSeedData.securityLogs || []);
     } catch (err) {
       console.error("Error synchronizing backend statistics", err);
     }
@@ -86,14 +76,9 @@ export default function App() {
     const fetchProfile = async () => {
       if (!token) return;
       try {
-        const response = await fetch('/api/auth/me', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!response.ok) {
-          throw new Error("Session expired");
-        }
-        const data = await response.json();
-        setUser(data.user);
+        // Mock profile fetch by decoding the token
+        const decoded = JSON.parse(atob(token));
+        setUser(decoded);
         fetchData();
       } catch (err) {
         handleLogout();
@@ -124,22 +109,23 @@ export default function App() {
   const handleConnectGmail = async () => {
     setIsConnectingGmail(true);
     try {
-      const response = await fetch('/api/auth/gmail/url', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const data = await response.json();
+      // Mock OAuth Flow delay
+      await new Promise(resolve => setTimeout(resolve, 500));
       
-      // Open popup with direct OAuth provider URL (mocked in server if not set up, live if client config is present)
-      const oauthWindow = window.open(
-        data.url,
-        'gmail_oauth_popup',
-        'width=600,height=700,status=no,toolbar=no,menubar=no'
-      );
-      if (!oauthWindow) {
-        alert("Popups are blocked! Please enable popups in your browser to authorize Gmail.");
+      // We can just simulate the OAuth success directly without opening a popup
+      // since this is a frontend-only mock demo.
+      if (user) {
+        setUser((prev: any) => ({
+          ...prev,
+          email: 'arclight-sandbox@gmail.com'
+        }));
       }
+      
+      // Dispatch the event that the useEffect is listening to
+      window.postMessage({ type: 'OAUTH_AUTH_SUCCESS', email: 'arclight-sandbox@gmail.com' }, '*');
+      
     } catch (err) {
-      console.error("Failed to fetch OAuth redirect URI", err);
+      console.error("Failed to mock OAuth redirect URI", err);
     } finally {
       setIsConnectingGmail(false);
     }
@@ -150,22 +136,11 @@ export default function App() {
     setIsScanning(true);
     setScanLog("Initializing Gemini 3.5 Flash deadline scanning daemon...");
     try {
-      const response = await fetch('/api/scan', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || 'Scan failed');
-      }
-
-      setScanLog(data.message);
+      // Mock scanning delay
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      setScanLog("Scan completed successfully. No new actionable emails found.");
       fetchData(); // Refresh metrics
-
-      // If a new email was received, auto-select it!
-      if (data.newEmail) {
-        setSelectedEmail(data.newEmail);
-      }
     } catch (err: any) {
       setScanLog("Scan completed with warning. " + err.message);
     } finally {
@@ -177,17 +152,14 @@ export default function App() {
   const handleAddKeyword = async (label: string, keyword: string) => {
     setIsAddingKeyword(true);
     try {
-      const response = await fetch('/api/keywords', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` 
-        },
-        body: JSON.stringify({ label, keyword })
-      });
-      if (response.ok) {
-        fetchData();
-      }
+      // Mock keyword addition
+      const newKeyword = {
+        id: `kw-${Date.now()}`,
+        label,
+        keyword,
+        created_at: new Date().toISOString()
+      };
+      setKeywords([...keywords, newKeyword]);
     } catch (err) {
       console.error("Failed to add keyword rule", err);
     } finally {
@@ -198,20 +170,15 @@ export default function App() {
   // Remove custom keyword labels
   const handleDeleteKeyword = async (id: string) => {
     try {
-      const response = await fetch(`/api/keywords/${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (response.ok) {
-        fetchData();
-        // Clear selected filter if it was the deleted keyword
-        const rule = keywords.find(k => k.id === id);
-        if (rule && activeFilterKeyword === rule.keyword) {
-          setActiveFilterKeyword(null);
-        }
+      // Mock keyword deletion
+      setKeywords(keywords.filter(kw => kw.id !== id));
+      // Clear selected filter if it was the deleted keyword
+      const rule = keywords.find(k => k.id === id);
+      if (rule && activeFilterKeyword === rule.keyword) {
+        setActiveFilterKeyword(null);
       }
     } catch (err) {
-      console.error("Failed to remove keyword rule", err);
+      console.error("Failed to delete keyword", err);
     }
   };
 
@@ -219,20 +186,20 @@ export default function App() {
   const handleTriggerSimulatedCall = async (emailId: string, subject: string, senderEmail: string) => {
     setIsTriggeringCall(true);
     try {
-      const response = await fetch('/api/alerts/voice', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` 
-        },
-        body: JSON.stringify({ emailId, subject, sender_email: senderEmail })
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        // Expose velocity rate limit error to user
-        alert(data.message || data.error);
-      }
-      fetchData(); // Synchronize voice calls list
+      // Mock API latency
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      const newCall = {
+        id: `vc-${Date.now()}`,
+        email_id: emailId,
+        subject,
+        twilio_call_sid: `mock-${Date.now()}`,
+        status: "completed",
+        called_at: new Date().toISOString()
+      };
+      setVoiceCalls(prev => [newCall, ...prev]);
+      
+      alert(`Simulated voice call queued successfully for: ${senderEmail}`);
     } catch (err: any) {
       console.error("Twilio request failed", err);
     } finally {

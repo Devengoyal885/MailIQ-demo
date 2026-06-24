@@ -45,18 +45,26 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onLoginSuccess }) => {
     setLoading(true);
 
     try {
-      const response = await fetch('/api/auth/verify-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone_number: phoneNumber, code: verificationCode })
-      });
-
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || 'Verification failed');
+      // Mock OTP validation (bypass backend)
+      const isDemo = verificationCode === "123456" || verificationCode === "999999" || verificationCode === "888888";
+      
+      if (!isDemo) {
+        throw new Error('Invalid OTP verification code. Try 123456 as a demo.');
       }
 
-      onLoginSuccess(data.token, data.user);
+      // Provide mock user data on success
+      const mockUser = {
+        id: "user-1",
+        firebase_uid: "demo-uid-arclight",
+        phone_number: phoneNumber,
+        email: "team.arclight@cumail.in",
+        created_at: new Date().toISOString()
+      };
+      
+      // Mock token
+      const mockToken = btoa(JSON.stringify({ id: mockUser.id, phone_number: mockUser.phone_number, email: mockUser.email }));
+      
+      onLoginSuccess(mockToken, mockUser);
     } catch (err: any) {
       setError(err.message || 'Verification failed');
     } finally {

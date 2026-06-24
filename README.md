@@ -14,6 +14,8 @@ Mail IQ is an AI-powered intelligent email copilot that triages massive inboxes,
 > **Winner of Chandigarh University's Stack Sprint 1.0 Hackathon — Crafted with Pride by Team ArcLight**  
 > Mail IQ was awarded **1st Place (Winner)** for its implementation of real-time serverless background cron triggers, a secure cyber-shield prompt-injection filter, and voice-assisted urgent deadline notification systems.
 
+**⚠️ NOTE:** This specific repository/branch is configured as a **frontend-only, statically deployable mock demo** for easy evaluation on platforms like Netlify. The Express backend has been bypassed, and all data (emails, alerts, keywords) is served from a mocked frontend state to ensure instant, frictionless deployment without configuring real API keys, databases, or cloud functions. Use the sandbox OTP code `123456` to log in instantly.
+
 ---
 
 ## 🏗️ SYSTEM ARCHITECTURE
