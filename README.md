@@ -1,20 +1,22 @@
-# 🚀 MAIL IQ — INTELLIGENT EMAIL TRIAGE & DEADLINE ALERTS
+# 🚀 Mail IQ — Intelligent Email Triage & Deadline Alerts
 
 [![Built with React](https://img.shields.io/badge/Built%20with-React%2019-indigo)](https://react.dev)
 [![Backend Node.js](https://img.shields.io/badge/Backend-Node.js%20%2F%20Express-teal)](https://nodejs.org)
-[![Powered by Gemini AI](https://img.shields.io/badge/AI-Gemini%20%2F%20Claude%20Sonnet-amber)](https://ai.google.dev/)
+[![Powered by Gemini AI](https://img.shields.io/badge/AI-Gemini%20%2F%20Claude-amber)](https://ai.google.dev/)
 [![Twilio Alerts](https://img.shields.io/badge/Alerts-Twilio%20Programmable%20Voice-red)](https://twilio.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-emerald.svg)](LICENSE)
+
+Mail IQ is an AI-powered intelligent email copilot that triages massive inboxes, detects real-time commitments, evaluates approaching deadlines with Gemini, filters security prompt injection exploits, and dispatches proactive phone notifications to users using Twilio Programmable Voice.
 
 ---
 
 ## 🏆 HACKATHON RECOGNITION
-> **Winner of Stack Sprint 1.0 Hackathon at Chandigarh University — Crafted with Pride by Team ArcLight**  
-> Mail IQ was awarded 1st Place for its innovative application of real-time serverless background cron triggers, secure prompt-injection filters, and voice-assisted urgent email alerts.
+> **Winner of Chandigarh University's Stack Sprint 1.0 Hackathon — Crafted with Pride by Team ArcLight**  
+> Mail IQ was awarded **1st Place (Winner)** for its implementation of real-time serverless background cron triggers, a secure cyber-shield prompt-injection filter, and voice-assisted urgent deadline notification systems.
 
 ---
 
-## 🏗️ SYSTEM ARCHITECTURE DIAGRAM
+## 🏗️ SYSTEM ARCHITECTURE
 
 ```
  [ Gmail API ] ──(OAuth 2.0 Flow)──> [ Express Backend ]
@@ -30,7 +32,7 @@
                                              ├──[ Injection Attempt ]──> [ Log Security DB ]
                                              │
                                              ▼ [ Valid Email ]
-                                   [ Gemini 3.5 / Claude ]
+                                   [ Gemini 3.5 AI Engine ]
                                     • Extracted Commitments
                                     • ISO-8601 Datetime
                                     • Urgency Score (1-10)
@@ -46,14 +48,14 @@
 
 ## ✨ KEY FEATURES
 
-1. **Gmail OAuth 2.0 Integration**: Connects dynamically to fetch mailbox payloads with secure refresh-token persistence.
-2. **Smart Sender Grouping ("Pockets")**: Packs massive inbox streams into collapsible sender cards sorted chronologically.
-3. **Custom Keyword Headings**: User-defined routing queries that map incoming messages to bespoke folders.
-4. **AI Deadline Detection**: Uses state-of-the-art LLMs to parse body structures and return structured ISO-8601 deadlines.
-5. **Cyber Shield Pre-Filter**: Strips promotional tracking, truncates bulk inputs, and blocks prompt-injection exploits.
-6. **Voice Alert Engine**: Fires phone calls using Twilio voice synthesis when deadlines land within 24 hours.
-7. **Firebase OTP Verification**: Phone verification flow paired with JWT-validated sessions.
-8. **Triple Display Palette**: Supports default **Light Mode**, standard **Dark Mode**, and blue-light-reducing **Night Mode** (amber tint).
+1. **Gmail OAuth 2.0 Integration**: Authenticates and connects securely to read mailboxes with refresh-token persistence.
+2. **Smart Sender Pockets**: Automatically consolidates incoming message streams into collapsible sender containers sorted chronologically.
+3. **Custom Keyword Headings**: User-defined routing rules that categorize incoming messages into dynamic custom folders.
+4. **AI Deadline Detection**: Uses the Gemini 3.5 Flash API to parse email bodies and extract structured, actionable ISO-8601 deadline dates.
+5. **Cyber Shield Pre-Filter**: Filters promotional emails, caps payload length to prevent context flooding, and blocks malicious prompt-injection attacks.
+6. **Voice Alarm Engine**: Simulates and triggers real voice notifications using Twilio Programmable Voice (with fallback browser speech synthesis) for upcoming deadlines.
+7. **Security Threat Logs**: Logs and blocks prompt injection override payloads in real-time, displaying details in a clean audit logs dashboard.
+8. **Eye-Care UI Themes**: Custom color palettes including **Light Mode**, standard **Dark Mode**, and **Auto-Night Mode** (blue-light reducing warm amber colors suited for late-night reviews).
 
 ---
 
@@ -61,94 +63,106 @@
 
 | Layer | Technology | Purpose |
 | :--- | :--- | :--- |
-| **Frontend** | React 19 + Vite + Tailwind CSS | Highly responsive, multi-theme desktop & mobile SPA. |
-| **Backend** | Express + tsx + Node.js | Aggregated API gateways, Gmail synchronizers, and security shields. |
-| **Database** | PostgreSQL / Local SQLite-JSON | Durable table layouts tracking OAuth tokens, alerts, and threat vectors. |
-| **AI Processing** | Google Gemini 3.5 / Claude Sonnet | JSON Schema-constrained deadline and commitment evaluator. |
-| **Outbound Alarms** | Twilio Programmable Voice | Automated synthetic Alice phone call triggers. |
+| **Frontend** | React 19 + Vite + Tailwind CSS | Highly responsive, multi-theme responsive interface. |
+| **Backend** | Express + Node.js + tsx | REST API gateway, Gmail authenticators, and security validators. |
+| **Database** | JSON File System (Simulated / Local SQLite) | Persistent storage for custom filters, emails, security logs, and tokens. |
+| **AI Processing** | Google Gemini 3.5 API | JSON Schema-constrained deadline and commitment extraction. |
+| **Outbound Alarms** | Twilio Programmable Voice | Dispatches synthetic Alice voice notifications for immediate attention. |
 
 ---
 
-## 🚀 QUICK START
+## 👥 TEAM ARCLIGHT (DEVELOPERS)
+Mail IQ was developed and crafted by the following members of **Team ArcLight**:
+*   **Deven** (goyaldeven4809@gmail.com)
+*   **Divya Verma**
+*   **Rishabh Verma**
+*   **Aditya Singh**
 
-### 1. Configure Local Environment Variables
-Create a `.env` file at the root:
+---
+
+## ⚙️ LOCAL QUICK START
+
+### 1. Configure Environment Variables
+Create a `.env` file at the root of the project:
 ```env
-# Server configs
+# Server Configuration
 PORT=3000
-JWT_SECRET=mailiq-super-secret-key-arclight-chandigarh
+JWT_SECRET=mailiq-super-secret-key-arclight-development
 
-# AI Model Credentials
-GEMINI_API_KEY=your_gemini_api_key
+# AI API Credentials
+GEMINI_API_KEY=your_gemini_api_key_here
 
-# Twilio Credentials
+# Twilio Voice Credentials
 TWILIO_ACCOUNT_SID=ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-TWILIO_AUTH_TOKEN=your_twilio_auth_token
-TWILIO_PHONE_NUMBER=+15550100
+TWILIO_AUTH_TOKEN=your_twilio_auth_token_here
+TWILIO_PHONE_NUMBER=your_twilio_purchased_phone_number_here
 
 # Google Gmail App Credentials
-GMAIL_CLIENT_ID=your_gmail_client_id
-GMAIL_CLIENT_SECRET=your_gmail_client_secret
+GMAIL_CLIENT_ID=your_gmail_client_id_here
+GMAIL_CLIENT_SECRET=your_gmail_client_secret_here
 APP_URL=http://localhost:3000
 ```
 
 ### 2. Install & Start Development Servers
 ```bash
-# Install dependencies
+# Install required dependencies
 npm install
 
-# Start full-stack Express + React/Vite integrated server
+# Start the full-stack integrated development environment (React + Express)
 npm run dev
 ```
 Open your browser and navigate to `http://localhost:3000`.
 
 ---
 
-## 🌐 DEPLOYMENT INSTRUCTIONS
+## 🌐 NETLIFY DEPLOYMENT GUIDE
 
-### Frontend Static Build (Netlify)
-Add a `netlify.toml` file to route page-level fallbacks:
-```toml
-[build]
-  command = "npm run build"
-  publish = "dist"
+Netlify is a premier host for **static frontends**. Because Mail IQ is a full-stack application containing a React client and a persistent Node.js/Express server (`server.ts`), Netlify will build and host the **static frontend**.
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-```
-Supply corresponding `VITE_` prefixed authentication endpoints inside the Netlify Dashboard.
+### ⚠️ Prerequisite: Ensure All Files Are Pushed to GitHub
+If you see errors on Netlify like:
+> `Failed to resolve /src/main.tsx from /opt/build/repo/index.html`
 
-### Backend Server (Railway / Render)
-Execute production build bundling via:
+This means you connected Netlify to your GitHub repository, but **you have not committed or pushed your local changes to GitHub yet**.
+**Solution:** Run these commands on your terminal to sync your codebase to GitHub before building on Netlify:
 ```bash
-npm run build
-npm run start
+git add .
+git commit -m "feat: setup clean React frontend with Netlify compatible configuration"
+git push origin main
 ```
 
 ---
 
-## 🗄️ DATABASE SCHEMA
+### 📝 What to Write in the Netlify Dashboard
 
-```
-  ┌──────────────┐          ┌───────────────────┐          ┌───────────────┐
-  │    users     │          │  email_analyses   │          │ keyword_rules │
-  ├──────────────┤          ├───────────────────┤          ├───────────────┤
-  │ id (PK)      │◄────┐    │ id (PK)           │          │ id (PK)       │
-  │ firebase_uid │     ├────│ user_id (FK)      │◄─────────│ user_id (FK)  │
-  │ phone_number │     │    │ email_id          │          │ label         │
-  │ gmail_token  │     │    │ action_required   │          │ keyword       │
-  └──────────────┘     │    │ deadline_datetime │          └───────────────┘
-                       │    └───────────────────┘
-                       │    ┌───────────────────┐
-                       │    │    voice_calls    │
-                       │    ├───────────────────┤
-                       └────│ user_id (FK)      │
-                            │ twilio_call_sid   │
-                            │ status            │
-                            └───────────────────┘
-```
+When setting up your site on Netlify, configure the build settings precisely as follows:
+
+#### 1. Build Settings
+*   **Repository:** Select your connected GitHub Repository.
+*   **Branch to deploy:** `main` (or your current development branch).
+*   **Build command:** `npm run build:client`
+    > *Note: This builds ONLY the static frontend assets via Vite, skipping Node backend compilation which Netlify doesn't run.*
+*   **Publish directory:** `dist`
+
+#### 2. Environment Variables (Netlify Dashboard -> Site Configuration -> Environment Variables)
+If your backend is hosted separately (e.g. on Railway/Render), you can add custom environment variables. If you want client-specific keys, set them here with the `VITE_` prefix:
+*   `VITE_SUPABASE_URL` (optional)
+*   `VITE_SUPABASE_ANON_KEY` (optional)
+*   `VITE_API_URL` (Set this to your backend server's production URL if hosted on Railway or Render, so the frontend can speak to the backend API).
+
+---
+
+### 🚀 Host Your Backend Server (Render / Railway / Fly.io)
+
+Since Netlify only hosts static files, you can deploy the full-stack companion backend (`server.ts`) to a persistent Node.js cloud provider in 1 minute:
+
+#### Deploy to Railway or Render:
+1. Create a new service pointing to your GitHub repository.
+2. Configure the following build scripts (provided in `package.json`):
+   * **Build Command:** `npm run build`
+   * **Start Command:** `npm run start`
+3. Add your Environment variables (e.g., `GEMINI_API_KEY`, `TWILIO_ACCOUNT_SID`, `JWT_SECRET`, etc.) inside your Railway or Render project settings.
+4. Set the port to `3000` (or let the system dynamically assign it via `process.env.PORT`).
 
 ---
 
@@ -187,72 +201,6 @@ Mail IQ guards LLM context against malicious prompt injections (e.g. *"Ignore pr
 2. **Bulk-Newsletter Defense**: Blocks emails bearing `List-Unsubscribe` headers or coming from promotional accounts.
 3. **Truncation limits**: Caps body lengths at 2000 characters to stop context-overflow exploits.
 4. **Velocity Governor**: Imposes a max-ceiling limit of **2 voice calls per sender per 24 hours** to prevent budget leaks.
-
----
-
-## 🌙 TRIPLE THEME CODES
-
-The system implements scheduled, transitions-aware eye care options:
-- **Light Theme**: Default high contrast white background canvas.
-- **Dark Theme**: Deep slate-900 canvas.
-- **Night Theme**: Built specifically for late-night review. It drops screen color warmth to amber values (`#1A1208` background, `#2A1F0E` surface, `#F5E6C8` text, and `#D97706` accents) to eliminate blue-light exposure. Includes a checkbox to auto-enable night mode between **9:00 PM and 7:00 AM**.
-
----
-
-## 📡 REST API ENDPOINTS
-
-### Authentication
-*   `POST /api/auth/verify-otp`  
-    *Body:* `{ "phone_number": "...", "code": "..." }`  
-    *Returns:* `{ "token": "...", "user": {...} }`
-
-### Email Triage
-*   `GET /api/emails`  
-    *Headers:* `Authorization: Bearer <JWT>`  
-    *Returns:* List of sorted email objects with analysis payloads.
-*   `POST /api/scan`  
-    *Headers:* `Authorization: Bearer <JWT>`  
-    *Returns:* Triggers active polling and returns scanned results.
-
-### Keywords Heading rules
-*   `GET /api/keywords`  
-    *Returns:* Configured keyword categories list.
-*   `POST /api/keywords`  
-    *Body:* `{ "label": "...", "keyword": "..." }`
-*   `DELETE /api/keywords/:id`
-
-### Voice Alerts
-*   `POST /api/alerts/voice`  
-    *Body:* `{ "emailId": "...", "subject": "..." }`  
-    *Returns:* Dispatches Twilio call, respecting velocity limits.
-
----
-
-## 📈 SAAS PRICING MATRIX
-
-| Feature | Free Tier | Pro Tier (Hackathon Special) | Enterprise |
-| :--- | :--- | :--- | :--- |
-| **Email Pockets** | Up to 3 senders | Unlimited Senders | Unlimited Senders |
-| **AI Scans** | 50 / month | Unlimited Scans | Dedicated Custom Model |
-| **Voice Alarms** | Email indicators only | Up to 15 Calls / month | Dedicated Twilio trunks |
-| **Theme System** | Light / Dark | Light / Dark / Auto-Night | Fully Custom CSS |
-| **Cost** | **$0 / mo** | **$9 / mo** | **Custom Quote** |
-
----
-
-## 🗺️ ROADMAP
-
-*   **Milestone 1**: Outlook & Office 365 integration.
-*   **Milestone 2**: Android & iOS native push notification companions.
-*   **Milestone 3**: Offline-first local on-device LLM fine-tuned models for corporate air-gapped security.
-
----
-
-## 👥 TEAM ARCLIGHT
-*   **Deven**
-*   **Divya Verma**
-*   **Rishabh Verma**
-*   **Aditya Singh**
 
 ---
 
