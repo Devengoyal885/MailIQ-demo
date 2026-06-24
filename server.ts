@@ -13,6 +13,18 @@ import crypto from "crypto";
 const app = express();
 const PORT = 3000;
 
+// Rewrite Netlify function path prefix
+app.use((req, res, next) => {
+  const prefix = "/.netlify/functions/api";
+  if (req.url.startsWith(prefix)) {
+    req.url = req.url.slice(prefix.length);
+  }
+  if (!req.url.startsWith("/api")) {
+    req.url = "/api" + req.url;
+  }
+  next();
+});
+
 // Body parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -841,6 +853,9 @@ async function startServer() {
     const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
     app.get("*", (req, res) => {
+      if (req.path.startsWith("/api")) {
+        return res.status(404).json({ error: `API route not found: ${req.method} ${req.path}` });
+      }
       res.sendFile(path.join(distPath, "index.html"));
     });
   }
