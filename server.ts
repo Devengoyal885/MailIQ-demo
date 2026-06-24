@@ -13,12 +13,25 @@ import crypto from "crypto";
 const app = express();
 const PORT = 3000;
 
+// Rewrite Netlify function path prefix
+app.use((req, res, next) => {
+  const prefix = "/.netlify/functions/api";
+  if (req.url.startsWith(prefix)) {
+    req.url = req.url.slice(prefix.length);
+  }
+  if (!req.url.startsWith("/api")) {
+    req.url = "/api" + req.url;
+  }
+  next();
+});
+
 // Body parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Ensure data directory exists
-const DATA_DIR = process.env.NETLIFY
+const isServerless = process.env.NETLIFY || process.env.LAMBDA_TASK_ROOT || process.env.AWS_EXECUTION_ENV;
+const DATA_DIR = isServerless
   ? "/tmp"
   : path.join(process.cwd(), "data");
 if (!fs.existsSync(DATA_DIR)) {
